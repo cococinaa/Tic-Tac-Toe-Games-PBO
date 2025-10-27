@@ -6,7 +6,7 @@ public class MyWorld extends World
     private int[] Box = new int[9];
     private int delta = 200, TURN = 0;
     private boolean GAMEOVER = false;
-    private int WINNER = -1; // Variabel ini akan menyimpan baris mana yang menang (0-7)
+    private int WINNER = -1; 
 
     public MyWorld()
     {
@@ -31,14 +31,11 @@ public class MyWorld extends World
             Box[i] = -1;
         }
         
-        // --- PERBAIKAN 1: Inisialisasi ini harus ada DI DALAM konstruktor ---
         TURN = Greenfoot.getRandomNumber(2);
         GAMEOVER = false;
         WINNER = -1;
-    } // <-- Konstruktor MyWorld() ditutup di sini
-
-    // <-- Kurung kurawal '}' yang salah dihapus dari sini
-    
+    } 
+   
     private void addBox(int a, int px, int py)
     {
         Kotak kotak = new Kotak(a, delta);
@@ -73,10 +70,10 @@ public class MyWorld extends World
         for (int i = 0; i < cek.length / 3; i++) { // 'i' adalah indeks baris (0-7)
             if (Box[cek[3 * i + 0]] == Box[cek[3 * i + 1]] && Box[cek[3 * i + 1]] == Box[cek[3 * i + 2]] && Box[cek[3 * i + 0]] >= 0) {
                 
-                // --- PERBAIKAN 3: Simpan indeks baris 'i', BUKAN '1' ---
-                WINNER = i; // Simpan baris mana yang menang (0-7)
+  
+                WINNER = i;
                 
-                return Box[cek[3 * i + 0]]; // Kembalikan siapa yang menang (Player 0 or Comp 1)
+                return Box[cek[3 * i + 0]]; 
             }
         }
         return -1;
@@ -87,7 +84,7 @@ public class MyWorld extends World
         int numisi = numFilled();
         if (numisi == 9) GAMEOVER = true;
         
-        int win = cekWin(); // 'win' akan berisi 0, 1, atau -1
+        int win = cekWin(); 
         if (win >= 0) GAMEOVER = true;
         
         if (!GAMEOVER)
@@ -103,19 +100,18 @@ public class MyWorld extends World
                     if (index >= 0 && index < 9) {
                         if (Box[index] < 0) {
                             Box[index] = TURN;
-                            addBox(TURN, (int)((io + 0.5) * delta), (int)((jo + 0.5) * delta)); // PERBAIKAN 2 (salah satu)
+                            addBox(TURN, (int)((io + 0.5) * delta), (int)((jo + 0.5) * delta)); 
                             TURN = (TURN == 0) ? 1 : 0;
                         }
                     }
                 }
             } else {
-                // Blok logika AI (Komputer)
                 if (numisi == 0) {
                     int a = Greenfoot.getRandomNumber(Box.length);
                     Box[a] = TURN;
                     int io = a % 3;
                     int jo = a / 3;
-                    // --- PERBAIKAN 2: '0.S' diubah menjadi '0.5' ---
+
                     addBox(TURN, (int)((io + 0.5) * delta), (int)((jo + 0.5) * delta));
                     TURN = (TURN == 0) ? 1 : 0;
                 } else if (numisi == 1 || numisi == 2) {
@@ -136,7 +132,7 @@ public class MyWorld extends World
                                 int io = a % 3;
                                 int jo = a / 3;
                                 Box[a] = TURN;
-                                // --- PERBAIKAN 2: '0.S' diubah menjadi '0.5' ---
+
                                 addBox(TURN, (int)((io + 0.5) * delta), (int)((jo + 0.5) * delta));
                                 TURN = (TURN == 0) ? 1 : 0;
                                 pasang = true;
@@ -144,16 +140,13 @@ public class MyWorld extends World
                         }
                     }
                 } else {
-                    // Ini adalah duplikat dari blok 'if (numisi == 0)' dan 'if (numisi == 1 || numisi == 2)'
-                    // Anda mungkin ingin menghapus blok 'else' besar ini dan hanya menyisakan logika AI terakhir
-                    
-                    // --- Blok duplikat dimulai di sini (saya biarkan sesuai kode asli Anda) ---
+            
                     if(numisi==0){ 
                         int a=Greenfoot.getRandomNumber(Box.length);
                         Box[a]=TURN;
                         int io=a%3;
                         int jo=a/3;
-                        addBox(TURN,(int)((io+0.5)*delta),(int)((jo+0.5)*delta)); // PERBAIKAN 2
+                        addBox(TURN,(int)((io+0.5)*delta),(int)((jo+0.5)*delta)); 
                         TURN=(TURN==0)?1:0;
                     }else if(numisi==1 || numisi==2){
                         if(Box[4]<0){
@@ -161,7 +154,7 @@ public class MyWorld extends World
                             int io=a%3;
                             int jo=a/3;
                             Box[a]=TURN;
-                            addBox(TURN,(int)((io+0.5)*delta),(int)((jo+0.5)*delta)); // PERBAIKAN 2
+                            addBox(TURN,(int)((io+0.5)*delta),(int)((jo+0.5)*delta)); 
                             TURN=(TURN==0)?1:0;
                         }else{
                             boolean pasang=false;
@@ -172,20 +165,20 @@ public class MyWorld extends World
                                     int io=a%3;
                                     int jo=a/3;
                                     Box[a]=TURN;
-                                    addBox(TURN,(int)((io+0.5)*delta),(int)((jo+0.5)*delta)); // PERBAIKAN 2
+                                    addBox(TURN,(int)((io+0.5)*delta),(int)((jo+0.5)*delta)); 
                                     TURN=(TURN==0)?1:0;
                                     pasang=true;
                                 }
                             }
                         }
-                    // --- Blok duplikat berakhir di sini ---
+
                         
                     }else{ 
-                        // Logika AI utama
-                        int a = searchBestPosition(0); // Cek apakah komputer (0) bisa menang
+
+                        int a = searchBestPosition(0); 
                         int waktu = 0;
                         if (a < 0) {
-                            a = searchBestPosition(1); // Cek apakah player (1) bisa menang (blok)
+                            a = searchBestPosition(1); 
                             waktu++;
                         }
 
@@ -206,47 +199,47 @@ public class MyWorld extends World
                             int io = a % 3;
                             int jo = a / 3;
                             Box[a] = TURN;
-                            addBox(TURN, (int)((io + 0.5) * delta), (int)((jo + 0.5) * delta)); // PERBAIKAN 2
+                            addBox(TURN, (int)((io + 0.5) * delta), (int)((jo + 0.5) * delta)); 
                             TURN = (TURN == 0) ? 1 : 0;
                         }
                     }
                 }
             }
         } else {
-            // --- Logika Game Over ---
+
             String text = "";
-            if (win >= 0) { // Jika ada pemenang
+            if (win >= 0) { 
                 text = (win == 0) ? "Player Win" : "Computer Win";
                 
-                // Logika menggambar garis (sekarang harusnya berfungsi karena WINNER = i)
-                if (WINNER == 0) { // Baris atas
+        
+                if (WINNER == 0) { 
                     addObject(new garisMerah(), (int)(0.5 * getWidth()), (int)(0.5 * delta));
-                } else if (WINNER == 1) { // Baris tengah
+                } else if (WINNER == 1) { 
                     addObject(new garisMerah(), (int)(0.5 * getWidth()), (int)(1.5 * delta));
-                } else if (WINNER == 2) { // Baris bawah
+                } else if (WINNER == 2) { 
                     addObject(new garisMerah(), (int)(0.5 * getWidth()), (int)(2.5 * delta));
-                } else if (WINNER == 3) { // Kolom kiri
+                } else if (WINNER == 3) { 
                     garisMerah rd = new garisMerah();
                     addObject(rd, (int)(0.5 * delta), (int)(0.5 * getHeight()));
                     rd.setRotation(90);
-                } else if (WINNER == 4) { // Kolom tengah
+                } else if (WINNER == 4) {
                     garisMerah rd = new garisMerah();
                     addObject(rd, (int)(1.5 * delta), (int)(0.5 * getHeight()));
                     rd.setRotation(90);
-                } else if (WINNER == 5) { // Kolom kanan
+                } else if (WINNER == 5) { 
                     garisMerah rd = new garisMerah();
                     addObject(rd, (int)(2.5 * delta), (int)(0.5 * getHeight()));
                     rd.setRotation(90);
-                } else if (WINNER == 6) { // Diagonal \
+                } else if (WINNER == 6) {
                     garisMerah rd = new garisMerah();
                     addObject(rd, (int)(0.5 * getWidth()), (int)(0.5 * getHeight()));
                     rd.setRotation(45);
-                } else if (WINNER == 7) { // Diagonal /
+                } else if (WINNER == 7) { 
                     garisMerah rd = new garisMerah();
                     addObject(rd, (int)(0.5 * getWidth()), (int)(0.5 * getHeight()));
                     rd.setRotation(-45);
                 }
-            } else { // Jika seri
+            } else { 
                 text = "Draw";
             }
             Tamat theend = new Tamat();
